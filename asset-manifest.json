@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/speech-recognizer-gpt/static/css/main.5b6e777f.chunk.css",
+    "main.js": "/speech-recognizer-gpt/static/js/main.089a98d7.chunk.js",
+    "main.js.map": "/speech-recognizer-gpt/static/js/main.089a98d7.chunk.js.map",
+    "runtime-main.js": "/speech-recognizer-gpt/static/js/runtime-main.f6c84b2e.js",
+    "runtime-main.js.map": "/speech-recognizer-gpt/static/js/runtime-main.f6c84b2e.js.map",
+    "static/js/2.a1ddf7ca.chunk.js": "/speech-recognizer-gpt/static/js/2.a1ddf7ca.chunk.js",
+    "static/js/2.a1ddf7ca.chunk.js.map": "/speech-recognizer-gpt/static/js/2.a1ddf7ca.chunk.js.map",
+    "index.html": "/speech-recognizer-gpt/index.html",
+    "precache-manifest.bfd508a1f1f501e005ef45398dc6d9b8.js": "/speech-recognizer-gpt/precache-manifest.bfd508a1f1f501e005ef45398dc6d9b8.js",
+    "service-worker.js": "/speech-recognizer-gpt/service-worker.js",
+    "static/css/main.5b6e777f.chunk.css.map": "/speech-recognizer-gpt/static/css/main.5b6e777f.chunk.css.map",
+    "static/js/2.a1ddf7ca.chunk.js.LICENSE.txt": "/speech-recognizer-gpt/static/js/2.a1ddf7ca.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f6c84b2e.js",
+    "static/js/2.a1ddf7ca.chunk.js",
+    "static/css/main.5b6e777f.chunk.css",
+    "static/js/main.089a98d7.chunk.js"
+  ]
+}
