@@ -79,7 +79,6 @@ app.post('/images/generations', async (req, res) => {
       n:  number,
       size: size
     });
-""
     res.status(200).send({
       bot: response.data
     });
