@@ -1,7 +1,7 @@
 {
   "name": "voicetext",
   "version": "0.1.0",
-  "homepage": "https://indrajitsadhukhan.github.io/speech-recognizer-gpt/",
+  "homepage": "https://indrajitsadhukhan.github.io/speech-recognizer-gpt-3/",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.12.4",
@@ -16,7 +16,7 @@
     "react": "^16.13.1",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.1",
     "react-speech-kit": "^3.0.1",
     "serve": "^14.2.0"
   },

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./App.css";
 import { useSpeechSynthesis } from "react-speech-kit";
+
 import { styled } from "@material-ui/core/styles";
 import { IconButton } from "@material-ui/core";
 import MicIcon from "@material-ui/icons/Mic";
+import { async } from 'q';
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -18,6 +20,8 @@ function App() {
   const [note, setNote] = useState(" ");
   const [savedNote, setSavedNote] = useState("");
   const { speak, cancel } = useSpeechSynthesis();
+  const [buttonText,setButtonText]=useState("Start Recording")
+  const [imageUrl,setImageUrl]=useState("")
 
   const handleListen = async (listenStatus) => {
     if (listenStatus) {
@@ -63,7 +67,8 @@ function App() {
       return parsedData;
     } else return "Error: API call failed. Try again..";
   }
-  const handleSaveNote = async () => {
+
+const handleSaveNote = async () => {
     // Call OpenAI Apis using note
     setSavedNote("Processing your input...");
     const res = await askQuestion(note);
@@ -114,6 +119,7 @@ function App() {
       </Wrapper>
     </Container>
   );
+
 }
 
 const Container = styled("div")({
