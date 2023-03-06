@@ -7,6 +7,8 @@ import { IconButton } from "@material-ui/core";
 import MicIcon from "@material-ui/icons/Mic";
 import { async } from 'q';
 
+const BASE_URL="https://main--visionary-youtiao-038df7.netlify.app/.netlify/functions/api"
+
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 const mic = new SpeechRecognition();
@@ -52,7 +54,7 @@ function App() {
   };
 
   async function askQuestion(prompt) {
-    const response = await fetch("http://localhost:8080/completion", {
+    const response = await fetch(BASE_URL+"/completion", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
