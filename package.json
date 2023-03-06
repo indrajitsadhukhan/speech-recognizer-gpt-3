@@ -1,8 +1,5 @@
 {
   "name": "voicetext",
-  "version": "0.1.0",
-  "homepage": "https://indrajitsadhukhan.github.io/speech-recognizer-gpt-3/",
-  "private": true,
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
