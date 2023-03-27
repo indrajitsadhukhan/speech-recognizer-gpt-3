@@ -1,29 +1,39 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./App.css";
+
 import { useSpeechSynthesis } from "react-speech-kit";
 
-import { styled } from "@material-ui/core/styles";
-import { IconButton } from "@material-ui/core";
-import MicIcon from "@material-ui/icons/Mic";
-import { async } from 'q';
+import Mic from "./asset/micBtn.svg";
+import Speak from "./asset/speak.jpg";
 
-const BASE_URL="https://main--visionary-youtiao-038df7.netlify.app/.netlify/functions/api"
+const BASE_URL =
+  "https://main--visionary-youtiao-038df7.netlify.app/.netlify/functions/api";
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
-const mic = new SpeechRecognition();
 
-mic.continuous = true;
+const SpeechGrammarList = window.webkitSpeechGrammarList;
+
+
+const mic = new SpeechRecognition();
+const speechRecognitionList = new SpeechGrammarList()
+
+mic.continuous = false;
 mic.interimResults = true;
-mic.lang = "en-US";
+mic.lang = "en-GB";
+mic.grammars=speechRecognitionList
+mic.maxAlternatives=1
 
 function App() {
   const [isListening, setIsListening] = useState(false);
   const [note, setNote] = useState(" ");
   const [savedNote, setSavedNote] = useState("");
   const { speak, cancel } = useSpeechSynthesis();
-  const [buttonText,setButtonText]=useState("Start Recording")
-  const [imageUrl,setImageUrl]=useState("")
+  useEffect(() => {
+    // Update the document title using the browser API
+    cancel()
+  });
+
 
   const handleListen = async (listenStatus) => {
     if (listenStatus) {
@@ -49,12 +59,13 @@ function App() {
       setNote(transcript);
       mic.onerror = (event) => {
         console.log(event.error);
+        setNote("");
       };
     };
   };
 
   async function askQuestion(prompt) {
-    const response = await fetch(BASE_URL+"/completion", {
+    const response = await fetch(BASE_URL + "/completion", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,15 +73,15 @@ function App() {
       body: JSON.stringify({
         prompt: prompt,
       }),
-    });
-    if (response.ok) {
+    }).catch((err) => console.log(err));
+    if (response?.ok) {
       const data = await response.json();
       const parsedData = data.bot;
       return parsedData;
-    } else return "Error: API call failed. Try again..";
+    } else return "I am sorry, could you say that again please";
   }
 
-const handleSaveNote = async () => {
+  const handleSaveNote = async () => {
     // Call OpenAI Apis using note
     setSavedNote("Processing your input...");
     const res = await askQuestion(note);
@@ -84,121 +95,60 @@ const handleSaveNote = async () => {
   };
 
   return (
-    <Container>
-      <Header>Enhanced User interaction using gpt 3</Header>
-      <Wrapper>
-        <SpeakSection>
-          <TextBox>
-            {isListening ? (
-              <>
-                Tap to <b>STOP</b> recording...
-              </>
-            ) : (
-              <>
-                Tap to <b>START</b> speaking...
-              </>
-            )}
-          </TextBox>
-          <SpeakButton
-            onClick={HandleSpeak}
-            style={{ backgroundColor: isListening ? "#1976d2" : "white " }}
-          >
-            <MicIcon
-              style={{
-                fontSize: 90,
-                color: isListening ? "white" : "rgba(0, 0, 0, 0.54)",
-              }}
+    <div className="main-div">
+      <header>
+        <h1 style={{ fontSize: 30 }}>Assistant on the Go</h1>
+        <p>(Enabled with GPT)</p>
+      </header>
+
+      <section className="holder-section">
+        <h2>Your transcript</h2>
+        <div className="text-holder">
+          <p>{note}</p>
+        </div>
+      </section>
+
+      <section className="holder-section">
+        <h2>Response</h2>
+        <div className="text-holder">
+          <p>{savedNote}</p>
+        </div>
+      </section>
+
+      <footer className="bg-blur">
+        <div className="tooltip info">
+          ?
+          <span className="tooltiptext" style={{ width: 300 }}>
+            Allow microphone to use this app. <br />
+            {`Settings -> All Apps -> Permission -> Enable Microphone`}
+          </span>
+        </div>
+        {/* <p style={{ marginBottom: 20 }}>Tap the Microphone</p> */}
+        <p style={{ marginBottom: 20 }}>
+          {isListening ? (
+            <>Speak & tap the Microphone...</>
+          ) : (
+            <>Tap the Microphone...</>
+          )}
+        </p>
+        <button className="mic-btn" onClick={HandleSpeak}>
+          {isListening ? (
+            <img
+              src={Speak}
+              style={{ background: `no-repeat center`, height: 90 }}
+              alt="speak-icon"
             />
-          </SpeakButton>
-          <TranscriptBox>
-            <b>TRANSCRIPT : </b> {note}
-          </TranscriptBox>
-        </SpeakSection>
-        <ResponseSection>
-          <RespHeader>Response from GPT-3</RespHeader>
-          <ResponseBox>{savedNote}</ResponseBox>
-        </ResponseSection>
-      </Wrapper>
-    </Container>
+          ) : (
+            <img
+              src={Mic}
+              style={{ background: `no-repeat center` }}
+              alt="mic-icon"
+            />
+          )}
+        </button>
+      </footer>
+    </div>
   );
-
 }
-
-const Container = styled("div")({
-  height: "100vh",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-});
-
-const Header = styled("div")({
-  width: "-webkit-fill-available",
-  textAlign: "center",
-  padding: "40px",
-  fontSize: "30px",
-  fontWeight: 500,
-  textTransform: "uppercase",
-  boxShadow: "0px 20px 15px -10px rgba(0,0,0,0.1)",
-  borderBottomLeftRadius: "4rem",
-  borderBottomRightRadius: "4rem",
-  background: "rgba(0,0,0,0.03) ",
-});
-
-const Wrapper = styled("div")({
-  display: "flex",
-  width: "100%",
-  justifyContent: "space-evenly",
-  marginTop: "50px",
-  flexGrow: 1,
-});
-
-const SpeakSection = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  padding: "20px",
-  width: "50%",
-});
-
-const TextBox = styled("div")({
-  fontSize: "20px",
-  color: "rgb(0,0,0,0.5)",
-  marginBottom: "50px",
-});
-
-const SpeakButton = styled(IconButton)({
-  boxShadow:
-    "0px 20px 15px -10px rgb(0,0,0,0.1), 20px 15px 15px -10px rgb(0,0,0,0.1), -20px 15px 15px -10px rgb(0,0,0,0.1)",
-  marginBottom: "50px",
-});
-
-const TranscriptBox = styled("div")({
-  padding: "10px",
-  fontSize: "15px",
-  color: "#000000",
-  width: "100%",
-});
-
-const ResponseSection = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  padding: "20px",
-  backgroundColor: "#193718",
-  width: "50%",
-});
-
-const RespHeader = styled("div")({
-  fontSize: "20px",
-  color: "rgb(255,255,255,0.9)",
-  marginBottom: "50px",
-  textAlign: "center",
-});
-
-const ResponseBox = styled("div")({
-  color: "rgb(255,255,255,0.9)",
-  fontSize: "18px",
-  padding: "20px",
-});
 
 export default App;
